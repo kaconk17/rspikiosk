@@ -1,7 +1,7 @@
 # Instalasi
 Menggunakan OS linux :
 1. Jalankan **fdisk** untuk mempartisi SD card:
-'fdisk /dev/sdX'
+`fdisk /dev/sdX`
 At the fdisk prompt, delete old partitions and create a new one:
 Type o. This will clear out any partitions on the drive.
 Type p to list partitions. There should be no partitions left.
