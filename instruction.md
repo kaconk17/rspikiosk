@@ -1,34 +1,66 @@
 # Instalasi
 Menggunakan OS linux :
-1. Jalankan **fdisk** untuk mempartisi SD card:
-`fdisk /dev/sdX`
-At the fdisk prompt, delete old partitions and create a new one:
-Type o. This will clear out any partitions on the drive.
-Type p to list partitions. There should be no partitions left.
-Type n, then p for primary, 1 for the first partition on the drive, press ENTER to accept the default first sector, then type +200M for the last sector.
-Type t, then c to set the first partition to type W95 FAT32 (LBA).
-Type n, then p for primary, 2 for the second partition on the drive, and then press ENTER twice to accept the default first and last sector.
-Write the partition table and exit by typing w.
-Create and mount the FAT filesystem:
-mkfs.vfat /dev/sdX1
-mkdir boot
-mount /dev/sdX1 boot
-Create and mount the ext4 filesystem:
-mkfs.ext4 /dev/sdX2
-mkdir root
-mount /dev/sdX2 root
-Download and extract the root filesystem (as root, not via sudo):
-wget http://os.archlinuxarm.org/os/ArchLinuxARM-rpi-4-latest.tar.gz
-bsdtar -xpf ArchLinuxARM-rpi-4-latest.tar.gz -C root
-sync
-Move boot files to the first partition:
-mv root/boot/* boot
-Unmount the two partitions:
-umount boot root
-Insert the SD card into the Raspberry Pi, connect ethernet, and apply 5V power.
-Use the serial console or SSH to the IP address given to the board by your router.
-Login as the default user alarm with the password alarm.
-The default root password is root.
-Initialize the pacman keyring and populate the Arch Linux ARM package signing keys:
-pacman-key --init
-pacman-key --populate archlinuxarm
+
+Jalankan **fdisk** untuk mempartisi SD card:
+
+    fdisk /dev/sdX
+
+Dalam **fdisk** prompt, hapus semua prtisi dan buat partisi baru:
+
+ketik `o`. Perintah ini akan menghapus semua partisi dalam drive.
+
+Ketik `p` Untuk menampilkan seluruh partisi. Pastikan tidak ada pertisi yang tersisa.
+
+
+Ketik `n`, kemudian `p` untuk partisi primary, `1` untuk membuat pertisi pertama dalam drive, tekan `ENTER` untuk memilih sector pertama secara default,
+
+ketikkan `+200M` untuk sector terakhir.
+
+
+Ketik `t`, kemudian `c` untuk menjadikan prtisi pertama menjadi type W95 FAT32 (LBA).
+
+
+Ketik `n`, kemudian `p` untuk partisi primary, `2` untuk partisi yang kedua dalam drive, dan kemudian tekan `ENTER` 2x untuk memilih sector pertama dan sector terakhir.
+
+
+Tulis tabel partisi kedalam drive sekaligus exit dengan mengetikkan `w`.
+
+
+Membuat dan mount filesystem FAT:
+
+    mkfs.vfat /dev/sdX1
+    mkdir boot
+    mount /dev/sdX1 boot
+
+Membuat dan mount filesystem ext4:
+
+    mkfs.ext4 /dev/sdX2
+    mkdir root
+    mount /dev/sdX2 root
+
+Download dan extract filesystem root (sebagai root, bukan via sudo):
+
+    wget http://os.archlinuxarm.org/os/ArchLinuxARM-rpi-4-latest.tar.gz
+    bsdtar -xpf ArchLinuxARM-rpi-4-latest.tar.gz -C root
+    sync
+
+Pindahkan file-file **boot** kedalam partisi pertama:
+
+    mv root/boot/* boot
+
+Unmount kedua partisi:
+
+    umount boot root
+
+Masukkan SD card kedalam Raspberry Pi, sambungkan kabel ethernet, dan pasang power 5V.
+
+Gunakan serial console atau **SSH** pada IP address yang didapatkan Raspberry Pi.
+
+Login menggunakan default user **alarm** dengan password **alarm**.
+
+Password default untuk **root** adalah **root**.
+
+Inisialisasi **pacman keyring** dan populate package Arch Linux ARM signing keys:
+
+    pacman-key --init
+    pacman-key --populate archlinuxarm
