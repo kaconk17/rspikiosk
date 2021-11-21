@@ -64,3 +64,52 @@ Inisialisasi **pacman keyring** dan populate package Arch Linux ARM signing keys
 
     pacman-key --init
     pacman-key --populate archlinuxarm
+
+
+## Merubah default User dan Merubah Password root
+
+Untuk merubah default user dan merubah password gunakan perintah:
+    
+    usermod -l new_username old_username
+    passwd username
+    usermod -d /home/new_username -m new_username
+
+Untuk merubah password root menggunakan perintah:
+
+    passwd
+
+
+## Memberi akses sudo untuk user
+
+Install paket **sudo**:
+
+    pacman -S sudo
+
+Edit file config yang ada di `/etc/sudoers` dengan menggunakan perintah:
+
+    EDITOR=nano visudo
+
+Dalam config file temukan baris text `root ALL=(ALL) ALL` dan tambahkan dibawahnya:
+
+`new_user ALL=(ALL) ALL`
+
+
+## Merubah nama hostname
+
+Untuk mengganti nama hostname gunakan perintah:
+
+    hostnamectl set-hostname New_Hostname
+
+
+## Install AUR Helper
+
+Install **git** dan **base-devel** dengan perintah:
+
+    sudo pacman -S git base-devel
+
+Install **yay** sebagai AUR Helper:
+
+    git clone https://aur.archlinux.org/yay.git 
+    cd yay
+    makepkg -si
+
