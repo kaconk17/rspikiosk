@@ -1,4 +1,5 @@
 # Instalasi
+
 Menggunakan OS linux :
 
 Jalankan **fdisk** untuk mempartisi SD card:
@@ -11,20 +12,15 @@ ketik `o`. Perintah ini akan menghapus semua partisi dalam drive.
 
 Ketik `p` Untuk menampilkan seluruh partisi. Pastikan tidak ada pertisi yang tersisa.
 
-
 Ketik `n`, kemudian `p` untuk partisi primary, `1` untuk membuat pertisi pertama dalam drive, tekan `ENTER` untuk memilih sector pertama secara default,
 
 ketikkan `+200M` untuk sector terakhir.
 
-
 Ketik `t`, kemudian `c` untuk menjadikan prtisi pertama menjadi type W95 FAT32 (LBA).
-
 
 Ketik `n`, kemudian `p` untuk partisi primary, `2` untuk partisi yang kedua dalam drive, dan kemudian tekan `ENTER` 2x untuk memilih sector pertama dan sector terakhir.
 
-
 Tulis tabel partisi kedalam drive sekaligus exit dengan mengetikkan `w`.
-
 
 Membuat dan mount filesystem FAT:
 
@@ -65,11 +61,10 @@ Inisialisasi **pacman keyring** dan populate package Arch Linux ARM signing keys
     pacman-key --init
     pacman-key --populate archlinuxarm
 
-
 ## Merubah default User dan Merubah Password root
 
 Untuk merubah default user dan merubah password gunakan perintah:
-    
+
     usermod -l new_username old_username
     passwd username
     usermod -d /home/new_username -m new_username
@@ -77,7 +72,6 @@ Untuk merubah default user dan merubah password gunakan perintah:
 Untuk merubah password root menggunakan perintah:
 
     passwd
-
 
 ## Memberi akses sudo untuk user
 
@@ -93,13 +87,11 @@ Dalam config file temukan baris text `root ALL=(ALL) ALL` dan tambahkan dibawahn
 
 `new_user ALL=(ALL) ALL`
 
-
 ## Merubah nama hostname
 
 Untuk mengganti nama hostname gunakan perintah:
 
     hostnamectl set-hostname New_Hostname
-
 
 ## Install AUR Helper
 
@@ -109,7 +101,68 @@ Install **git** dan **base-devel** dengan perintah:
 
 Install **yay** sebagai AUR Helper:
 
-    git clone https://aur.archlinux.org/yay.git 
+    git clone https://aur.archlinux.org/yay.git
     cd yay
     makepkg -si
 
+## Setting timezone & ntp
+
+Aktifkan ntp agar waktu pada system selalu update:
+
+    sudo timedatectl set-ntp true
+
+Rubah setting zona waktu sesuai lokasi:
+
+    sudo timedatectl set-timezone Asia/Jakarta
+
+## Install Window Manager
+
+Untuk dapat menjalankan Raspberry sebagai KIOSK mode diperlukan Window manager, install window manager dengan perintah:
+
+    sudo pacman -S xorg i3 xorg-xinit ttf-dejavu
+
+## Membuat user Auto login
+
+Dalam system KIOSK tidak memerlukan login user untuk bisa menjalankan system, sehingga harus dibuatkan configurasi agar user kita bisa auto login tanpa memerlukan password.
+
+Buat file config dalam systemd menggunakan perintah:
+
+    sudo mkdir /etc/systemd/system/getty@tty1.service.d
+    sudo nano /etc/systemd/system/getty@tty1.service.d/override.conf
+
+Kemudian masukkan dalam file **override.conf** :
+
+    [Service]
+    ExecStart=
+    ExecStart=-/usr/bin/agetty --autologin new_user --noclear %I $TERM
+
+## Menjalankan firefox dalam KIOSK Mode
+
+Dalam KIOSK system ini menggunakan browser firefox, sehingga harus install dulu firefox:
+
+    sudo pacman -S firefox
+
+Buatkan script untuk menjalankan window manager & forefox dalam mode KIOSK:
+
+    nano startkiosk.sh
+
+Masukkan script dalam file **startkiosk.sh** dengan script berikut:
+
+    #!/bin/sh
+    xset -dpms      # disable DPMS (Energy Star) features.
+    xset s off      # disable screen saver
+    xset s noblank  # don't blank the video device
+    i3 & # starts the WM
+    xterm &         # launches a helpful terminal
+    firefox --kiosk --noerrdialogs --disable-pinch --check-for-update-interval=604800 http://yourwebappaddress
+
+Jalankan script secara otomatis menggunakan **.bash_profile**, edit bash_profile seperti berikut:
+
+    nano .bash_profile
+
+Rubah isi bash_profile seperti berikut:
+
+    # ~/.bash_profile
+
+    [[ -f ~/.bashrc ]] && . ~/.bashrc
+    [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && xinit ./startkiosk.sh
