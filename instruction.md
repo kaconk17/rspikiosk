@@ -166,3 +166,46 @@ Rubah isi bash_profile seperti berikut:
 
     [[ -f ~/.bashrc ]] && . ~/.bashrc
     [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && xinit ./startkiosk.sh
+
+Jika ukuran layar kurang pas bisa dirubah settingan pada boot config.txt:
+
+    sudo nano /boot/config.txt
+
+Kemudian tambahkan text berikut:
+
+    hdmi_group=2
+    hdmi_mode=85
+
+## Menjalankan python flask server untuk keperluan shutdown
+
+Untuk bisa menggunakan GPIO Pin dengan python diperlukan install paket berikut:
+
+    yay -S python-nanopi-gpio-git
+    yay -S python-adafruit-gpio
+
+Buat script python dalam folder `/home/new_user` dengan nama **app.py** dengan isi sesuai sample file app.py.
+
+Install semua python package yang diperlukan sesuai daftar dalam file **requirements.txt** dengan cara:
+
+    sudo pip install -r requirements.txt
+
+Jalankan flask app.py sebagai service:
+
+    sudo nano /etc/systemd/system/myscript.service
+
+Kemudian masukkan script berikut:
+
+    [Unit]
+    Description=Script
+
+    [Service]
+    ExecStart=sudo python /home/new_user/app.py
+    RemainAfterExit=true
+
+    [Install]
+    WantedBy=multi-user.target
+
+Jalankan script sebagai service sehingga otomatis jalan saat system start:
+
+    sudo systemctl start myscript.service
+    sudo systemctl enable myscript.service
