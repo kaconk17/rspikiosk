@@ -185,6 +185,10 @@ Untuk bisa menggunakan GPIO Pin dengan python diperlukan install paket berikut:
 
 Buat script python dalam folder `/home/new_user` dengan nama **app.py** dengan isi sesuai sample file app.py.
 
+Instal python pip:
+    
+    sudo pacman -S python-pip
+
 Install semua python package yang diperlukan sesuai daftar dalam file **requirements.txt** dengan cara:
 
     sudo pip install -r requirements.txt
