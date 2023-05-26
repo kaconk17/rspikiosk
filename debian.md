@@ -45,7 +45,7 @@ allowed_users=anybody
 needs_root_rights=yes
 ```
 
-## Menjalankan firefox dalam KIOSK Mode
+## Menjalankan chromium dalam KIOSK Mode
 
 Dalam KIOSK system ini menggunakan browser chromium, sehingga harus install dulu chromium:
 
