@@ -80,6 +80,9 @@ Rubah isi bash_profile seperti berikut:
 
 Buat script python dalam folder `/home/new_user` dengan nama **app.py** dengan isi sesuai sample file app.py.
 
+install python pip:
+
+`sudo apt install python3-pip`
 
 Install semua python package yang diperlukan sesuai daftar dalam file **requirements.txt** dengan cara:
 
