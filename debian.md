@@ -49,7 +49,7 @@ needs_root_rights=yes
 
 Dalam KIOSK system ini menggunakan browser chromium, sehingga harus install dulu chromium:
 
-    sudo apt install chromium
+    sudo apt install chromium xterm
 
 Buatkan script untuk menjalankan window manager & chromium dalam mode KIOSK:
 
@@ -98,7 +98,7 @@ Kemudian masukkan script berikut:
     Description=Script
 
     [Service]
-    ExecStart=sudo python /home/new_user/app.py
+    ExecStart=sudo python3 /home/new_user/app.py
     RemainAfterExit=true
 
     [Install]
